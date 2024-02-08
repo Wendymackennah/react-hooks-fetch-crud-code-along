@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ItemForm from "./ItemForm";
 import Filter from "./Filter";
 import Item from "./Item";
@@ -10,18 +10,22 @@ function ShoppingList() {
   useEffect(() => {
     fetch("http://localhost:4000/items")
       .then((r) => r.json())
-      .then((items) => setItems(items)); 
+      .then((items) => setItems(items));
   }, []);
 
-  function handleUpdateItem(updatedItem) {
-    const updatedItems = items.map((item) => {
-      if (item.id === updatedItem.id) {
-        return updatedItem;
-      } else {
-        return item;
-      }
-    });
+  function handleAddItem(newItem) {
+    setItems([...items, newItem]);
+  }
+
+  function handleUpdatedItem(updatedItem) {
+    const updatedItems = items.map((item) =>
+      item.id === updatedItem.id ? updatedItem : item
+    );
     setItems(updatedItems);
+  }
+
+  function handleCategoryChange(category) {
+    setSelectedCategory(category);
   }
 
   function handleDeleteItem(deletedItem) {
@@ -29,19 +33,9 @@ function ShoppingList() {
     setItems(updatedItems);
   }
 
-  function handleAddItem(newItem) {
-    setItems([...items, newItem]);
-  }
-
-  function handleCategoryChange(category) {
-    setSelectedCategory(category);
-  }
-
-  const itemsToDisplay = items.filter((item) => {
-    if (selectedCategory === "All") return true;
-
-    return item.category === selectedCategory;
-  });
+  const itemsToDisplay = items.filter((item) =>
+    selectedCategory === "All" ? true : item.category === selectedCategory
+  );
 
   return (
     <div className="ShoppingList">
@@ -55,7 +49,7 @@ function ShoppingList() {
           <Item
             key={item.id}
             item={item}
-            onUpdateItem={handleUpdateItem}
+            onUpdateItem={handleUpdatedItem}
             onDeleteItem={handleDeleteItem}
           />
         ))}

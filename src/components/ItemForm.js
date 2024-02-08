@@ -6,6 +6,7 @@ function ItemForm({ onAddItem }) {
 
   function handleSubmit(e) {
     e.preventDefault();
+
     const itemData = {
       name: name,
       category: category,
@@ -20,7 +21,7 @@ function ItemForm({ onAddItem }) {
       body: JSON.stringify(itemData),
     })
       .then((r) => r.json())
-      .then((newItem) => console.log(newItem));
+      .then((newItem) => onAddItem(newItem));
   }
 
   return (
@@ -34,7 +35,6 @@ function ItemForm({ onAddItem }) {
           onChange={(e) => setName(e.target.value)}
         />
       </label>
-
       <label>
         Category:
         <select
@@ -47,7 +47,6 @@ function ItemForm({ onAddItem }) {
           <option value="Dessert">Dessert</option>
         </select>
       </label>
-
       <button type="submit">Add to List</button>
     </form>
   );
